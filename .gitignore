@@ -1,0 +1,15 @@
+﻿# Entornos virtuales
+.venv/
+venv/
+env/
+
+# Caché y compilados de Python
+__pycache__/
+*.py[cod]
+*.class
+.pytest_cache/
+
+# Configuración local de IDEs y sistema
+.vscode/
+.idea/
+.DS_Store
