@@ -11,8 +11,8 @@ from concurrent.futures import ProcessPoolExecutor
 import chess
 
 from ajedrez import AlfaBeta, Aleatorio, Voraz, jugar, puntos
-from grupoYY.mcts import MCTS
-from grupoYY.minimax import Minimax
+from grupoGKPG.mcts import MCTS
+from grupoGKPG.minimax import Minimax
 
 # Cada versión, con un nombre corto. Una función que crea el jugador (por eso el lambda).
 # Para probar un parámetro, la misma clase con otro valor; para probar una heurística, la vuestra:
@@ -21,7 +21,7 @@ from grupoYY.minimax import Minimax
 #     "ab2-centro": lambda: Minimax(evaluar=evaluar_centro),
 VERSIONES = {
     "mcts": lambda: MCTS(),
-    "ab2": lambda: Minimax(profundidad=2),
+    "ab2": lambda: Minimax(profundidad=3),
 }
 
 RIVALES = {

@@ -31,47 +31,49 @@ class Nodo:
 
 # ---------------------------------------------------------------- paso M1
 def recompensa(tablero, color):
-    """Cuánto le gusta el tablero a `color`, entre 0 (perdido) y 1 (ganado).
-
-    Mate: 0 o 1, según quién esté mateado. Ahogado o material insuficiente: 0,5.
-    Si la partida sigue, una estimación con el material: 1 / (1 + e^(-m/3)),
-    donde m = material(tablero, color).
-    """
-    raise NotImplementedError("M1: recompensa")
+    if tablero.is_checkmate():
+        return 0.0 if tablero.turn == color else 1.0
+    if tablero.is_stalemate() or tablero.is_insufficient_material():
+        return 0.5
+    return 1 / (1 + math.exp(-material(tablero, color) / 3))
 
 
 # ---------------------------------------------------------------- paso M2
 def ucb1(hijo, c):
-    """La puntuación UCB1 de `hijo`: su media más c por el término de exploración."""
-    raise NotImplementedError("M2: ucb1")
+    explotar = hijo.valor / hijo.visitas
+    explorar = c * math.sqrt(math.log(hijo.padre.visitas) / hijo.visitas)
+    return explotar + explorar
 
 
 def seleccionar(nodo, c):
-    """El hijo de `nodo` con más UCB1."""
-    raise NotImplementedError("M2: seleccionar")
+    return max(nodo.hijos, key=lambda h: ucb1(h, c))
 
 
 # ---------------------------------------------------------------- paso M3
 def expandir(nodo, tablero):
-    """Saca una jugada de nodo.sin_probar, la juega en `tablero`, crea su hijo,
-    lo cuelga de `nodo` y lo devuelve."""
-    raise NotImplementedError("M3: expandir")
+    jugada = nodo.sin_probar.pop()
+    tablero.push(jugada)
+    hijo = Nodo(tablero, nodo, jugada)
+    nodo.hijos.append(hijo)
+    return hijo
 
 
 # ---------------------------------------------------------------- paso M4
 def simular(tablero, profundidad, color, recompensa=recompensa):
-    """Juega al azar como mucho `profundidad` medias jugadas (o hasta que no queden
-    jugadas legales) y devuelve recompensa(tablero, color). `recompensa` es la heurística."""
-    raise NotImplementedError("M4: simular")
+    for _ in range(profundidad):
+        jugadas = list(tablero.legal_moves)
+        if not jugadas:
+            break
+        tablero.push(random.choice(jugadas))
+    return recompensa(tablero, color)
 
 
 # ---------------------------------------------------------------- paso M5
 def retropropagar(nodo, r):
-    """Sube desde `nodo` hasta la raíz sumando a cada nodo una visita y la recompensa `r`.
-
-    Todo el árbol cuenta desde el mismo jugador, el que decide en la raíz. Es lo más sencillo,
-    y tiene un fallo que podéis arreglar en el reto "El rival también elige"."""
-    raise NotImplementedError("M5: retropropagar")
+    while nodo is not None:
+        nodo.visitas += 1
+        nodo.valor += r
+        nodo = nodo.padre
 
 
 # ---------------------------------------------------------------- paso M6
@@ -107,18 +109,20 @@ class MCTS:
         self.yo = tablero.turn                      # el que decide: el árbol entero cuenta desde él
         raiz = Nodo(tablero)
         n = 0
+        # el bucle de elegir, sin el raise (allí va con dos sangrías más)
         while True:
-            t = tablero.copy(stack=False)           # una copia para esta iteración
+            t = tablero.copy(stack=False)
             nodo = raiz
-            # 1. selección:      mientras el nodo no tenga jugadas sin probar y sí hijos,
-            #                    bajad al hijo que diga self.seleccionar(nodo) y jugadlo en t
-            # 2. expansión:      si quedan jugadas sin probar, self.expandir(nodo, t)
-            # 3. simulación:     r = self.simular(t)
-            # 4. retropropagación: self.retropropagar(...)
-            raise NotImplementedError("M6: el bucle de elegir")
+            while not nodo.sin_probar and nodo.hijos:      # 1. selección
+                nodo = self.seleccionar(nodo)
+                t.push(nodo.jugada)
+            if nodo.sin_probar:                              # 2. expansión
+                nodo = self.expandir(nodo, t)
+            r = self.simular(t)                              # 3. simulación
+            self.retropropagar(nodo, r)                      # 4. retropropagación
             n += 1
             if (self.iteraciones and n >= self.iteraciones) or \
-               (not self.iteraciones and time.perf_counter() > fin):
+            (not self.iteraciones and time.perf_counter() > fin):
                 break
         self.estadisticas = sorted(((h.jugada, h.visitas, h.valor / h.visitas) for h in raiz.hijos),
                                    key=lambda e: -e[1])
