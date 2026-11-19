@@ -21,7 +21,9 @@ from grupoGKPG.minimax import Minimax
 #     "ab2-centro": lambda: Minimax(evaluar=evaluar_centro),
 VERSIONES = {
     "mcts": lambda: MCTS(),
-    "ab2": lambda: Minimax(profundidad=3),
+    "ab1": lambda: Minimax(profundidad=1),
+    "ab2": lambda: Minimax(profundidad=2),
+    "ab3": lambda: Minimax(profundidad=3),
 }
 
 RIVALES = {
@@ -42,7 +44,7 @@ APERTURAS = {
     "Inglesa": "c4 e5 Nc3 Nf6",
 }
 
-TIEMPO = 0.3          # segundos por jugada
+TIEMPO = 1          # segundos por jugada
 MAX_MEDIAS = 120      # medias jugadas desde la apertura; después decide el material
 PROCESOS = max(1, (os.cpu_count() or 2) // 2)
 
