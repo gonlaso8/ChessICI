@@ -20,10 +20,13 @@ from grupoGKPG.minimax import Minimax
 #     "ab3": lambda: Minimax(profundidad=3),
 #     "ab2-centro": lambda: Minimax(evaluar=evaluar_centro),
 VERSIONES = {
-    "mcts": lambda: MCTS(),
+    # Reto 9: sin y con quietud
     "ab1": lambda: Minimax(profundidad=1),
+    "ab1-quietud": lambda: Minimax(profundidad=1, quieta=True),
     "ab2": lambda: Minimax(profundidad=2),
+    "ab2-quietud": lambda: Minimax(profundidad=2, quieta=True),
     "ab3": lambda: Minimax(profundidad=3),
+    "ab3-quietud": lambda: Minimax(profundidad=3, quieta=True),
 }
 
 RIVALES = {
