@@ -81,7 +81,7 @@ class MCTS:
     """El jugador. `c` es la constante de exploración, `profundidad` el corte de la simulación,
     `recompensa` la heurística, e `iteraciones`, si no es None, sustituye al reloj (para las pruebas)."""
 
-    def __init__(self, nombre="grupoYY", c=3, profundidad=10, iteraciones=None, recompensa=recompensa):
+    def __init__(self, nombre="grupoGKPG-mcts", c=3, profundidad=10, iteraciones=None, recompensa=recompensa):
         self.nombre = nombre
         self.c = c
         self.profundidad = profundidad
