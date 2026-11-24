@@ -25,3 +25,18 @@ ab3-quietud        100% ±0 (16-0-0)      100% ±0 (16-0-0)       97% ±6 (15-1-
   y con un nivel menos ab2-quietud (96%) iguala a ab3 (98%), dentro del margen.
 - ab3-quietud no vale: 36 de 1283 jugadas pasan de 1,5 s (pierde por tiempo en partida estricta).
   Nos quedamos con ab2-quietud (máximo 0,55 s).
+  
+ 23/11 -> Reto 3: el rival también elige
+ - MCTSRival existe ahora para que en los turnos del rival se elija lo que el rival haría de manera que sea más ventajoso para él.
+ 
+                          Aleatorio                 Voraz             AlfaBeta2             MCTS guía         TOTAL
+ab1                 97% ±6 (15-1-0)       47% ±17 (3-9-4)        0% ±0 (0-0-16)        3% ±6 (0-1-15)       37% ±11
+ab1-quietud        100% ±0 (16-0-0)      100% ±0 (16-0-0)       56% ±22 (7-4-5)       94% ±9 (14-2-0)        88% ±7
+ab2                100% ±0 (16-0-0)      100% ±0 (16-0-0)       50% ±24 (7-2-7)      91% ±10 (13-3-0)        85% ±8
+ab2-quietud        100% ±0 (16-0-0)       97% ±6 (15-1-0)      84% ±18 (13-1-2)       97% ±6 (15-1-0)        95% ±5
+ab3                 97% ±6 (15-1-0)      100% ±0 (16-0-0)       97% ±6 (15-1-0)       94% ±9 (14-2-0)        97% ±3
+ab3-quietud        100% ±0 (16-0-0)      100% ±0 (16-0-0)       97% ±6 (15-1-0)       97% ±6 (15-1-0)        98% ±2
+mcts               100% ±0 (16-0-0)       94% ±9 (14-2-0)        0% ±0 (0-0-16)       53% ±25 (8-1-7)       62% ±12
+mcts-rival         100% ±0 (16-0-0)      84% ±18 (13-1-2)        6% ±9 (0-2-14)       59% ±25 (9-1-6)       62% ±12
+
+ 

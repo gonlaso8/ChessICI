@@ -128,3 +128,19 @@ class MCTS:
                                    key=lambda e: -e[1])
         self.iteraciones_hechas = n
         return max(raiz.hijos, key=lambda h: h.visitas).jugada   # el más visitado
+
+
+# Reto "El rival también elige"
+class MCTSRival(MCTS):
+    """En los niveles donde elige el rival, baja por lo mejor para él (1 - media), no para nosotros."""
+
+    def seleccionar(self, nodo):
+        elige_rival = nodo.color == self.yo     # si la jugada que lleva a `nodo` fue nuestra, ahora decide el rival
+
+        def puntos(hijo):
+            media = hijo.valor / hijo.visitas
+            if elige_rival:
+                media = 1 - media
+            return media + self.c * math.sqrt(math.log(nodo.visitas) / hijo.visitas)
+
+        return max(nodo.hijos, key=puntos)

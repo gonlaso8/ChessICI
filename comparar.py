@@ -11,7 +11,7 @@ from concurrent.futures import ProcessPoolExecutor
 import chess
 
 from ajedrez import AlfaBeta, Aleatorio, Voraz, jugar, puntos
-from grupoGKPG.mcts import MCTS
+from grupoGKPG.mcts import MCTS, MCTSRival
 from grupoGKPG.minimax import Minimax
 
 # Cada versión, con un nombre corto. Una función que crea el jugador (por eso el lambda).
@@ -27,12 +27,16 @@ VERSIONES = {
     "ab2-quietud": lambda: Minimax(profundidad=2, quieta=True),
     "ab3": lambda: Minimax(profundidad=3),
     "ab3-quietud": lambda: Minimax(profundidad=3, quieta=True),
+    # Reto "El rival también elige": sin y con el rival eligiendo lo mejor para él
+    "mcts": lambda: MCTS(),
+    "mcts-rival": lambda: MCTSRival(),
 }
 
 RIVALES = {
     "Aleatorio": lambda: Aleatorio(),
     "Voraz": lambda: Voraz(),
     "AlfaBeta2": lambda: AlfaBeta(2),
+    "MCTS guía": lambda: MCTS(),
 }
 
 # Cada apertura se juega dos veces contra cada rival: una con blancas y otra con negras.
